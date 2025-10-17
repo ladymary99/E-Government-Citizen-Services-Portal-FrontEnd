@@ -8,16 +8,22 @@ import {
   Home,
   Briefcase,
   ShieldCheck,
-  ArrowRight,
 } from "lucide-react";
 import "./LandingPage.css";
+import icon1 from "../assets/icon1.png";
+import icon2 from "../assets/icon2.png";
+import icon3 from "../assets/icon3.png";
+import i1 from "../assets/1.png";
+import i2 from "../assets/2.png";
+import i3 from "../assets/3.png";
+import i4 from "../assets/4.png";
 
 const LandingPage = () => {
   const departments = [
-    { icon: Building2, name: "Department of Interior", color: "#1e40af" },
-    { icon: Briefcase, name: "Department of Commerce", color: "#059669" },
-    { icon: Home, name: "Department of Housing", color: "#f59e0b" },
-    { icon: ShieldCheck, name: "Department of Justice", color: "#dc2626" },
+    { image: i1, name: "Department of Interior" },
+    { image: i2, name: "Department of Commerce" },
+    { image: i3, name: "Department of Housing" },
+    { image: i4, name: "Department of Justice" },
   ];
 
   const steps = [
@@ -25,20 +31,20 @@ const LandingPage = () => {
       number: "01",
       title: "Apply",
       description: "Submit your service request with required documents online",
-      icon: FileText,
+      image: icon2,
     },
     {
       number: "02",
       title: "Process",
       description:
         "Our officers review and process your application efficiently",
-      icon: Users,
+      image: icon3,
     },
     {
       number: "03",
       title: "Receive",
       description: "Get your approved documents and services delivered",
-      icon: CheckCircle,
+      image: icon1,
     },
   ];
 
@@ -49,7 +55,7 @@ const LandingPage = () => {
         <div className="container">
           <div className="header-content">
             <div className="logo">
-              <Building2 size={32} />
+              {/* <Building2 size={32} /> */}
               <span>E-Government Portal</span>
             </div>
             <nav className="nav-menu">
@@ -85,11 +91,10 @@ const LandingPage = () => {
               secure, and transparent digital services for all citizens.
             </p>
             <div className="hero-buttons">
-              <Link to="/citizen/register" className="btn btn-primary btn-lg">
+              <Link to="/citizen/register" className="btnlg">
                 Get Started
-                <ArrowRight size={20} />
               </Link>
-              <Link to="/citizen/login" className="btn btn-outline btn-lg">
+              <Link to="/citizen/login" className="btnlg">
                 Login
               </Link>
             </div>
@@ -123,7 +128,7 @@ const LandingPage = () => {
               >
                 <div className="step-number">{step.number}</div>
                 <div className="step-icon">
-                  <step.icon size={32} />
+                  <img src={step.image} className="department-icon" />
                 </div>
                 <h3 className="step-title">{step.title}</h3>
                 <p className="step-description">{step.description}</p>
@@ -160,7 +165,8 @@ const LandingPage = () => {
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
               >
-                <dept.icon size={40} />
+                <img src={dept.image} className="department-icon" />
+
                 <h3>{dept.name}</h3>
               </motion.div>
             ))}
@@ -179,7 +185,7 @@ const LandingPage = () => {
           >
             <h2>Ready to Access Our Services?</h2>
             <p>Join thousands of citizens using our digital platform</p>
-            <Link to="/citizen/login" className="btn btn-primary btn-lg">
+            <Link to="/citizen/login" className="btnlg2">
               Login to Access Services
             </Link>
           </motion.div>
@@ -191,7 +197,6 @@ const LandingPage = () => {
         <div className="container">
           <div className="footer-content">
             <div className="footer-logo">
-              <Building2 size={24} />
               <span>E-Government Portal</span>
             </div>
             <p className="footer-text">
