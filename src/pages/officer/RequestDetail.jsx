@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import Layout from '../../components/Layout';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Layout from "../../components/Layout";
 import {
   LayoutDashboard,
   FileText,
@@ -10,10 +10,10 @@ import {
   FileCheck,
   CheckCircle,
   XCircle,
-  Download
-} from 'lucide-react';
-import { requestsAPI } from '../../services/api';
-import toast from 'react-hot-toast';
+  Download,
+} from "lucide-react";
+import { requestsAPI } from "../../services/api";
+import toast from "react-hot-toast";
 
 const RequestDetail = () => {
   const { id } = useParams();
@@ -21,11 +21,11 @@ const RequestDetail = () => {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState("");
 
   const menuItems = [
-    { path: '/officer/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/officer/dashboard', label: 'Requests', icon: FileText },
+    { path: "/officer/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/officer/dashboard", label: "Requests", icon: FileText },
   ];
 
   useEffect(() => {
@@ -38,19 +38,19 @@ const RequestDetail = () => {
       const response = await requestsAPI.getById(id);
       setRequest(response.data.request);
     } catch (error) {
-      console.error('Error fetching request:', error);
+      console.error("Error fetching request:", error);
       // Mock data
       setRequest({
         id: id,
-        citizen_name: 'John Smith',
-        citizen_email: 'john.smith@example.com',
-        service_name: 'Business License',
-        description: 'New business registration for tech startup',
-        status: 'pending',
+        citizen_name: "John Smith",
+        citizen_email: "john.smith@example.com",
+        service_name: "Business License",
+        description: "New business registration for tech startup",
+        status: "pending",
         created_at: new Date().toISOString(),
         documents: [
-          { name: 'business_plan.pdf', size: '2.5 MB' },
-          { name: 'id_card.pdf', size: '1.2 MB' },
+          { name: "business_plan.pdf", size: "2.5 MB" },
+          { name: "id_card.pdf", size: "1.2 MB" },
         ],
       });
     } finally {
@@ -62,14 +62,14 @@ const RequestDetail = () => {
     setActionLoading(true);
     try {
       await requestsAPI.updateStatus(id, {
-        status: 'approved',
+        status: "approved",
         officer_notes: notes,
       });
-      toast.success('Request approved successfully!');
-      navigate('/officer/dashboard');
+      toast.success("Request approved successfully!");
+      navigate("/officer/dashboard");
     } catch (error) {
-      console.error('Error approving request:', error);
-      toast.error('Failed to approve request');
+      console.error("Error approving request:", error);
+      toast.error("Failed to approve request");
     } finally {
       setActionLoading(false);
     }
@@ -77,21 +77,21 @@ const RequestDetail = () => {
 
   const handleReject = async () => {
     if (!notes) {
-      toast.error('Please provide rejection reason');
+      toast.error("Please provide rejection reason");
       return;
     }
 
     setActionLoading(true);
     try {
       await requestsAPI.updateStatus(id, {
-        status: 'rejected',
+        status: "rejected",
         officer_notes: notes,
       });
-      toast.success('Request rejected');
-      navigate('/officer/dashboard');
+      toast.success("Request rejected");
+      navigate("/officer/dashboard");
     } catch (error) {
-      console.error('Error rejecting request:', error);
-      toast.error('Failed to reject request');
+      console.error("Error rejecting request:", error);
+      toast.error("Failed to reject request");
     } finally {
       setActionLoading(false);
     }
@@ -99,20 +99,22 @@ const RequestDetail = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: 'badge-pending',
-      processing: 'badge-processing',
-      approved: 'badge-approved',
-      rejected: 'badge-rejected',
+      pending: "badge-pending",
+      processing: "badge-processing",
+      approved: "badge-approved",
+      rejected: "badge-rejected",
     };
-    return badges[status] || 'badge-pending';
+    return badges[status] || "badge-pending";
   };
 
   if (loading) {
     return (
       <Layout menuItems={menuItems} title="Officer Portal">
-        <div style={{ textAlign: 'center', padding: '100px 20px' }}>
+        <div style={{ textAlign: "center", padding: "100px 20px" }}>
           <div className="spinner"></div>
-          <p style={{ marginTop: '20px', color: 'var(--gray)' }}>Loading request details...</p>
+          <p style={{ marginTop: "20px", color: "var(--gray)" }}>
+            Loading request details...
+          </p>
         </div>
       </Layout>
     );
@@ -127,61 +129,91 @@ const RequestDetail = () => {
         </div>
       </Layout>
     );
-  }return (
+  }
+  return (
     <Layout menuItems={menuItems} title="Officer Portal">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '600' }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "32px",
+          }}
+        >
+          <h2 style={{ fontSize: "28px", fontWeight: "600" }}>
             Request #{request.id}
           </h2>
-          <span className={badge ${getStatusBadge(request.status)}}>
+          <span className={`badge ${getStatusBadge(request.status)}`}>
             {request.status}
           </span>
         </div>
 
-        <div className="grid-2" style={{ marginBottom: '32px' }}>
+        <div className="grid-2" style={{ marginBottom: "32px" }}>
           {/* Request Details */}
           <div className="card">
             <div className="card-header">
               <h3 className="card-title">Request Information</h3>
             </div>
             <div className="card-body">
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              <div style={{ marginBottom: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    marginBottom: "8px",
+                  }}
+                >
                   <FileCheck size={20} color="var(--primary)" />
                   <strong>Service:</strong>
                 </div>
-                <p style={{ marginLeft: '32px' }}>{request.service_name}</p>
+                <p style={{ marginLeft: "32px" }}>{request.service_name}</p>
               </div>
 
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              <div style={{ marginBottom: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    marginBottom: "8px",
+                  }}
+                >
                   <User size={20} color="var(--primary)" />
                   <strong>Citizen:</strong>
                 </div>
-                <p style={{ marginLeft: '32px' }}>
-                  {request.citizen_name}<br />
+                <p style={{ marginLeft: "32px" }}>
+                  {request.citizen_name}
+                  <br />
                   {request.citizen_email}
                 </p>
               </div>
 
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              <div style={{ marginBottom: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    marginBottom: "8px",
+                  }}
+                >
                   <Calendar size={20} color="var(--primary)" />
                   <strong>Submitted:</strong>
                 </div>
-                <p style={{ marginLeft: '32px' }}>
+                <p style={{ marginLeft: "32px" }}>
                   {new Date(request.created_at).toLocaleString()}
                 </p>
               </div>
 
               <div>
                 <strong>Description:</strong>
-                <p style={{ marginTop: '8px', color: 'var(--gray)' }}>
+                <p style={{ marginTop: "8px", color: "var(--gray)" }}>
                   {request.description}
                 </p>
               </div>
@@ -200,8 +232,10 @@ const RequestDetail = () => {
                     <div className="file-item-info">
                       <FileText size={20} />
                       <div>
-                        <div style={{ fontWeight: '500' }}>{doc.name}</div>
-                        <small style={{ color: 'var(--gray)' }}>{doc.size}</small>
+                        <div style={{ fontWeight: "500" }}>{doc.name}</div>
+                        <small style={{ color: "var(--gray)" }}>
+                          {doc.size}
+                        </small>
                       </div>
                     </div>
                     <button className="btn btn-outline btn-sm">
@@ -210,14 +244,21 @@ const RequestDetail = () => {
                   </div>
                 ))
               ) : (
-                <p style={{ color: 'var(--gray)', textAlign: 'center', padding: '20px' }}>
+                <p
+                  style={{
+                    color: "var(--gray)",
+                    textAlign: "center",
+                    padding: "20px",
+                  }}
+                >
                   No documents attached
                 </p>
               )}
             </div>
           </div>
-        </div>{/* Officer Notes and Actions */}
-        {request.status === 'pending' && (
+        </div>
+        {/* Officer Notes and Actions */}
+        {request.status === "pending" && (
           <div className="card">
             <div className="card-header">
               <h3 className="card-title">Review & Decision</h3>
@@ -234,14 +275,14 @@ const RequestDetail = () => {
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ display: "flex", gap: "12px" }}>
                 <button
                   className="btn btn-success"
                   onClick={handleApprove}
                   disabled={actionLoading}
                 >
                   <CheckCircle size={20} />
-                  {actionLoading ? 'Processing...' : 'Approve Request'}
+                  {actionLoading ? "Processing..." : "Approve Request"}
                 </button>
                 <button
                   className="btn btn-danger"
@@ -249,7 +290,7 @@ const RequestDetail = () => {
                   disabled={actionLoading}
                 >
                   <XCircle size={20} />
-                  {actionLoading ? 'Processing...' : 'Reject Request'}
+                  {actionLoading ? "Processing..." : "Reject Request"}
                 </button>
               </div>
             </div>

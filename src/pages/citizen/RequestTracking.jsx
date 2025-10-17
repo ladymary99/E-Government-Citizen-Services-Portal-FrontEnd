@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Layout from '../../components/Layout';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Layout from "../../components/Layout";
 import {
   LayoutDashboard,
   FileText,
@@ -8,24 +8,23 @@ import {
   Bell,
   User,
   Search,
-  Filter
-} from 'lucide-react';
-import { requestsAPI } from '../../services/api';
-import toast from 'react-hot-toast';
+} from "lucide-react";
+import { requestsAPI } from "../../services/api";
+import toast from "react-hot-toast";
 
 const RequestTracking = () => {
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [loading, setLoading] = useState(true);
 
   const menuItems = [
-    { path: '/citizen/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/citizen/apply', label: 'Apply for Service', icon: FileText },
-    { path: '/citizen/requests', label: 'Track Requests', icon: Clock },
-    { path: '/citizen/notifications', label: 'Notifications', icon: Bell },
-    { path: '/citizen/profile', label: 'Profile', icon: User },
+    { path: "/citizen/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/citizen/apply", label: "Apply for Service", icon: FileText },
+    { path: "/citizen/requests", label: "Track Requests", icon: Clock },
+    { path: "/citizen/notifications", label: "Notifications", icon: Bell },
+    { path: "/citizen/profile", label: "Profile", icon: User },
   ];
 
   useEffect(() => {
@@ -40,31 +39,33 @@ const RequestTracking = () => {
     try {
       setLoading(true);
       const response = await requestsAPI.getAll();
-      setRequests(response.data.requests  []);
+      setRequests(response.data.requests || []);
     } catch (error) {
-      console.error('Error fetching requests:', error);
+      console.error("Error fetching requests:", error);
+      toast.error("Failed to fetch requests, showing sample data.");
+
       // Mock data
       const mockRequests = [
         {
           id: 1,
-          service_name: 'Business License',
-          status: 'pending',
+          service_name: "Business License",
+          status: "pending",
           created_at: new Date().toISOString(),
-          description: 'New business registration'
+          description: "New business registration",
         },
         {
           id: 2,
-          service_name: 'ID Renewal',
-          status: 'approved',
+          service_name: "ID Renewal",
+          status: "approved",
           created_at: new Date(Date.now() - 86400000).toISOString(),
-          description: 'National ID renewal'
+          description: "National ID renewal",
         },
         {
           id: 3,
-          service_name: 'Building Permit',
-          status: 'processing',
+          service_name: "Building Permit",
+          status: "processing",
           created_at: new Date(Date.now() - 172800000).toISOString(),
-          description: 'Construction permit'
+          description: "Construction permit",
         },
       ];
       setRequests(mockRequests);
@@ -74,16 +75,17 @@ const RequestTracking = () => {
   };
 
   const filterRequests = () => {
-    let filtered = requests;
+    let filtered = [...requests];
 
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(req => req.status === statusFilter);
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((req) => req.status === statusFilter);
     }
 
     if (searchTerm) {
-      filtered = filtered.filter(req =>
-        req.service_name?.toLowerCase().includes(searchTerm.toLowerCase()) 
-        req.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (req) =>
+          req.service_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          req.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -92,22 +94,21 @@ const RequestTracking = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: 'badge-pending',
-      processing: 'badge-processing',
-      approved: 'badge-approved',
-      rejected: 'badge-rejected',
-      completed: 'badge-completed',
+      pending: "badge-pending",
+      processing: "badge-processing",
+      approved: "badge-approved",
+      rejected: "badge-rejected",
+      completed: "badge-completed",
     };
-    return badges[status] || 'badge-pending';
+    return badges[status] || "badge-pending";
   };
 
   const getProgressSteps = (status) => {
-    const steps = ['pending', 'processing', 'approved', 'completed'];
+    const steps = ["pending", "processing", "approved", "completed"];
     const currentIndex = steps.indexOf(status);
     return steps.map((step, index) => ({
       name: step,
       completed: index <= currentIndex,
-      active: index === currentIndex,
     }));
   };
 
@@ -118,15 +119,28 @@ const RequestTracking = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '32px' }}>
+        <h2
+          style={{ fontSize: "28px", fontWeight: "600", marginBottom: "32px" }}
+        >
           Track Your Requests
-        </h2>{/* Search and Filter */}
-        <div className="search-filter-bar">
-          <div className="form-group" style={{ marginBottom: 0, flex: 1 }}>
-            <div style={{ position: 'relative' }}>
+        </h2>
+
+        {/* Search and Filter */}
+        <div
+          className="search-filter-bar"
+          style={{ display: "flex", gap: "16px", marginBottom: "24px" }}
+        >
+          <div className="form-group" style={{ flex: 1 }}>
+            <div style={{ position: "relative" }}>
               <Search
                 size={20}
-                style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--gray)' }}
+                style={{
+                  position: "absolute",
+                  left: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "var(--gray)",
+                }}
               />
               <input
                 type="text"
@@ -134,13 +148,13 @@ const RequestTracking = () => {
                 placeholder="Search requests..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ paddingLeft: '44px' }}
+                style={{ paddingLeft: "40px" }}
               />
             </div>
           </div>
-          <div className="form-group" style={{ marginBottom: 0 }}>
+          <div className="form-group">
             <select
-              className="form-select filter-select"
+              className="form-select"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -157,9 +171,11 @@ const RequestTracking = () => {
         {/* Requests Table */}
         <div className="card">
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '60px' }}>
+            <div style={{ textAlign: "center", padding: "60px" }}>
               <div className="spinner"></div>
-              <p style={{ marginTop: '20px', color: 'var(--gray)' }}>Loading requests...</p>
+              <p style={{ marginTop: "20px", color: "var(--gray)" }}>
+                Loading requests...
+              </p>
             </div>
           ) : filteredRequests.length > 0 ? (
             <div className="table-container">
@@ -183,21 +199,34 @@ const RequestTracking = () => {
                       <td>{request.service_name}</td>
                       <td>{request.description}</td>
                       <td>
-                        <span className={badge ${getStatusBadge(request.status)}}>
+                        <span
+                          className={`badge ${getStatusBadge(request.status)}`}
+                        >
                           {request.status}
                         </span>
                       </td>
-                      <td>{new Date(request.created_at).toLocaleDateString()}</td>
                       <td>
-                        <div className="progress-steps" style={{ display: 'flex', gap: '4px', minWidth: '120px' }}>
+                        {new Date(request.created_at).toLocaleDateString()}
+                      </td>
+                      <td>
+                        <div
+                          className="progress-steps"
+                          style={{
+                            display: "flex",
+                            gap: "4px",
+                            minWidth: "120px",
+                          }}
+                        >
                           {getProgressSteps(request.status).map((step, idx) => (
                             <div
                               key={idx}
                               style={{
-                                width: '24px',
-                                height: '4px',
-                                borderRadius: '2px',
-                                background: step.completed ? 'var(--success)' : 'var(--border)',
+                                width: "24px",
+                                height: "4px",
+                                borderRadius: "2px",
+                                background: step.completed
+                                  ? "var(--success)"
+                                  : "var(--border)",
                               }}
                               title={step.name}
                             />
@@ -214,9 +243,10 @@ const RequestTracking = () => {
               <FileText className="empty-state-icon" size={64} />
               <h3 className="empty-state-title">No Requests Found</h3>
               <p className="empty-state-text">
-                {searchTerm || statusFilter !== 'all'
-                  ? 'Try adjusting your filters'
-                  : 'You haven\'t submitted any requests yet'}</p>
+                {searchTerm || statusFilter !== "all"
+                  ? "Try adjusting your filters"
+                  : "You haven't submitted any requests yet"}
+              </p>
             </div>
           )}
         </div>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import Layout from '../../components/Layout';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import Layout from "../../components/Layout";
 import {
   LayoutDashboard,
   FileText,
@@ -11,10 +11,10 @@ import {
   Plus,
   CheckCircle,
   XCircle,
-  AlertCircle
-} from 'lucide-react';
-import { requestsAPI } from '../../services/api';
-import toast from 'react-hot-toast';
+  AlertCircle,
+} from "lucide-react";
+import { requestsAPI } from "../../services/api";
+import toast from "react-hot-toast";
 
 const CitizenDashboard = () => {
   const [requests, setRequests] = useState([]);
@@ -27,11 +27,11 @@ const CitizenDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const menuItems = [
-    { path: '/citizen/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/citizen/apply', label: 'Apply for Service', icon: FileText },
-    { path: '/citizen/requests', label: 'Track Requests', icon: Clock },
-    { path: '/citizen/notifications', label: 'Notifications', icon: Bell },
-    { path: '/citizen/profile', label: 'Profile', icon: User },
+    { path: "/citizen/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/citizen/apply", label: "Apply for Service", icon: FileText },
+    { path: "/citizen/requests", label: "Track Requests", icon: Clock },
+    { path: "/citizen/notifications", label: "Notifications", icon: Bell },
+    { path: "/citizen/profile", label: "Profile", icon: User },
   ];
 
   useEffect(() => {
@@ -42,23 +42,33 @@ const CitizenDashboard = () => {
     try {
       setLoading(true);
       const response = await requestsAPI.getAll();
-      const data = response.data.requests  [];
+      const data = response.data.requests || [];
       setRequests(data.slice(0, 5));
 
       // Calculate stats
       setStats({
         total: data.length,
-        pending: data.filter(r => r.status === 'pending').length,
-        approved: data.filter(r => r.status === 'approved').length,
-        rejected: data.filter(r => r.status === 'rejected').length,
+        pending: data.filter((r) => r.status === "pending").length,
+        approved: data.filter((r) => r.status === "approved").length,
+        rejected: data.filter((r) => r.status === "rejected").length,
       });
     } catch (error) {
-      console.error('Error fetching requests:', error);
-      toast.error('Failed to load requests');
+      console.error("Error fetching requests:", error);
+      toast.error("Failed to load requests");
       // Use mock data if API fails
       const mockRequests = [
-        { id: 1, service_name: 'Business License', status: 'pending', created_at: new Date().toISOString() },
-        { id: 2, service_name: 'ID Renewal', status: 'approved', created_at: new Date().toISOString() },
+        {
+          id: 1,
+          service_name: "Business License",
+          status: "pending",
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: 2,
+          service_name: "ID Renewal",
+          status: "approved",
+          created_at: new Date().toISOString(),
+        },
       ];
       setRequests(mockRequests);
       setStats({ total: 2, pending: 1, approved: 1, rejected: 0 });
@@ -69,13 +79,13 @@ const CitizenDashboard = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: 'badge-pending',
-      processing: 'badge-processing',
-      approved: 'badge-approved',
-      rejected: 'badge-rejected',
-      completed: 'badge-completed',
+      pending: "badge-pending",
+      processing: "badge-processing",
+      approved: "badge-approved",
+      rejected: "badge-rejected",
+      completed: "badge-completed",
     };
-    return badges[status]  'badge-pending';
+    return badges[status] || "badge-pending";
   };
 
   return (
@@ -85,7 +95,9 @@ const CitizenDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '32px' }}>
+        <h2
+          style={{ fontSize: "28px", fontWeight: "600", marginBottom: "32px" }}
+        >
           Welcome to Your Dashboard
         </h2>
 
@@ -119,8 +131,9 @@ const CitizenDashboard = () => {
             <div className="stat-value">{stats.rejected}</div>
             <div className="stat-label">Rejected</div>
           </div>
-        </div>{/* Quick Actions */}
-        <div className="card" style={{ marginBottom: '32px' }}>
+        </div>
+        {/* Quick Actions */}
+        <div className="card" style={{ marginBottom: "32px" }}>
           <div className="card-header">
             <h3 className="card-title">Quick Actions</h3>
           </div>
@@ -145,7 +158,7 @@ const CitizenDashboard = () => {
           </div>
           <div className="card-body">
             {loading ? (
-              <div style={{ textAlign: 'center', padding: '40px' }}>
+              <div style={{ textAlign: "center", padding: "40px" }}>
                 <div className="spinner"></div>
               </div>
             ) : requests.length > 0 ? (
@@ -163,13 +176,19 @@ const CitizenDashboard = () => {
                     {requests.map((request) => (
                       <tr key={request.id}>
                         <td>#{request.id}</td>
-                        <td>{request.service_name || 'Service'}</td>
+                        <td>{request.service_name || "Service"}</td>
                         <td>
-                          <span className={badge ${getStatusBadge(request.status)}}>
+                          <span
+                            className={`badge ${getStatusBadge(
+                              request.status
+                            )}`}
+                          >
                             {request.status}
                           </span>
                         </td>
-                        <td>{new Date(request.created_at).toLocaleDateString()}</td>
+                        <td>
+                          {new Date(request.created_at).toLocaleDateString()}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

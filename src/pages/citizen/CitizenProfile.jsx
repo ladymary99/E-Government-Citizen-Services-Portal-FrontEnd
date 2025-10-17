@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import Layout from '../../components/Layout';
-import { useAuth } from '../../context/AuthContext';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Layout from "../../components/Layout";
+import { useAuth } from "../../context/AuthContext";
 import {
   LayoutDashboard,
   FileText,
@@ -11,28 +11,28 @@ import {
   Mail,
   Phone,
   MapPin,
-  Save
-} from 'lucide-react';
-import { authAPI } from '../../services/api';
-import toast from 'react-hot-toast';
+  Save,
+} from "lucide-react";
+import { authAPI } from "../../services/api";
+import toast from "react-hot-toast";
 
 const CitizenProfile = () => {
   const { user, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name  '',
-    email: user?.email  '',
-    phone: user?.phone  '',
-    address: user?.address  '',
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    address: user?.address || "",
   });
   const [loading, setLoading] = useState(false);
 
   const menuItems = [
-    { path: '/citizen/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/citizen/apply', label: 'Apply for Service', icon: FileText },
-    { path: '/citizen/requests', label: 'Track Requests', icon: Clock },
-    { path: '/citizen/notifications', label: 'Notifications', icon: Bell },
-    { path: '/citizen/profile', label: 'Profile', icon: User },
+    { path: "/citizen/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/citizen/apply", label: "Apply for Service", icon: FileText },
+    { path: "/citizen/requests", label: "Track Requests", icon: Clock },
+    { path: "/citizen/notifications", label: "Notifications", icon: Bell },
+    { path: "/citizen/profile", label: "Profile", icon: User },
   ];
 
   const handleChange = (e) => {
@@ -46,11 +46,11 @@ const CitizenProfile = () => {
     try {
       const response = await authAPI.updateProfile(formData);
       updateUser(response.data.user);
-      toast.success('Profile updated successfully!');
+      toast.success("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error('Failed to update profile');
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,9 @@ const CitizenProfile = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '32px' }}>
+        <h2
+          style={{ fontSize: "28px", fontWeight: "600", marginBottom: "32px" }}
+        >
           My Profile
         </h2>
 
@@ -128,7 +130,8 @@ const CitizenProfile = () => {
                     onChange={handleChange}
                     disabled={!isEditing}
                   />
-                </div><div className="form-group">
+                </div>
+                <div className="form-group">
                   <label className="form-label">
                     <MapPin size={16} />
                     Address
@@ -146,11 +149,21 @@ const CitizenProfile = () => {
             </div>
 
             {isEditing && (
-              <div className="card-body" style={{ borderTop: '1px solid var(--border)', paddingTop: '24px' }}>
-                <div style={{ display: 'flex', gap: '12px' }}>
-                  <button type="submit" className="btn btn-primary" disabled={loading}>
+              <div
+                className="card-body"
+                style={{
+                  borderTop: "1px solid var(--border)",
+                  paddingTop: "24px",
+                }}
+              >
+                <div style={{ display: "flex", gap: "12px" }}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={loading}
+                  >
                     <Save size={20} />
-                    {loading ? 'Saving...' : 'Save Changes'}
+                    {loading ? "Saving..." : "Save Changes"}
                   </button>
                   <button
                     type="button"
@@ -158,10 +171,10 @@ const CitizenProfile = () => {
                     onClick={() => {
                       setIsEditing(false);
                       setFormData({
-                        name: user?.name  '',
-                        email: user?.email  '',
-                        phone: user?.phone  '',
-                        address: user?.address  '',
+                        name: user?.name || "",
+                        email: user?.email || "",
+                        phone: user?.phone || "",
+                        address: user?.address || "",
                       });
                     }}
                   >

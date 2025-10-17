@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Layout from '../../components/Layout';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Layout from "../../components/Layout";
 import {
   LayoutDashboard,
   FileText,
@@ -9,18 +9,18 @@ import {
   User,
   CheckCircle,
   AlertCircle,
-  Info
-} from 'lucide-react';
+  Info,
+} from "lucide-react";
 
 const CitizenNotifications = () => {
   const [notifications, setNotifications] = useState([]);
 
   const menuItems = [
-    { path: '/citizen/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/citizen/apply', label: 'Apply for Service', icon: FileText },
-    { path: '/citizen/requests', label: 'Track Requests', icon: Clock },
-    { path: '/citizen/notifications', label: 'Notifications', icon: Bell },
-    { path: '/citizen/profile', label: 'Profile', icon: User },
+    { path: "/citizen/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/citizen/apply", label: "Apply for Service", icon: FileText },
+    { path: "/citizen/requests", label: "Track Requests", icon: Clock },
+    { path: "/citizen/notifications", label: "Notifications", icon: Bell },
+    { path: "/citizen/profile", label: "Profile", icon: User },
   ];
 
   useEffect(() => {
@@ -28,25 +28,25 @@ const CitizenNotifications = () => {
     setNotifications([
       {
         id: 1,
-        type: 'success',
-        title: 'Request Approved',
-        message: 'Your Business License request (#1234) has been approved.',
+        type: "success",
+        title: "Request Approved",
+        message: "Your Business License request (#1234) has been approved.",
         date: new Date().toISOString(),
         read: false,
       },
       {
         id: 2,
-        type: 'info',
-        title: 'Request Update',
-        message: 'Your ID Renewal request is being processed.',
+        type: "info",
+        title: "Request Update",
+        message: "Your ID Renewal request is being processed.",
         date: new Date(Date.now() - 86400000).toISOString(),
         read: false,
       },
       {
         id: 3,
-        type: 'warning',
-        title: 'Document Required',
-        message: 'Additional documents needed for Building Permit request.',
+        type: "warning",
+        title: "Document Required",
+        message: "Additional documents needed for Building Permit request.",
         date: new Date(Date.now() - 172800000).toISOString(),
         read: true,
       },
@@ -65,11 +65,11 @@ const CitizenNotifications = () => {
 
   const getAlertClass = (type) => {
     const classes = {
-      success: 'alert-success',
-      info: 'alert-info',
-      warning: 'alert-warning',
+      success: "alert-success",
+      info: "alert-info",
+      warning: "alert-warning",
     };
-    return classes[type] || 'alert-info';
+    return classes[type] || "alert-info";
   };
 
   return (
@@ -79,7 +79,9 @@ const CitizenNotifications = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '32px' }}>
+        <h2
+          style={{ fontSize: "28px", fontWeight: "600", marginBottom: "32px" }}
+        >
           Notifications
         </h2>
 
@@ -89,15 +91,17 @@ const CitizenNotifications = () => {
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={alert ${getAlertClass(notification.type)}}
+                  className={`alert ${getAlertClass(notification.type)}`}
                   style={{ opacity: notification.read ? 0.7 : 1 }}
                 >
                   {getIcon(notification.type)}
                   <div style={{ flex: 1 }}>
-                    <h4 style={{ fontWeight: '600', marginBottom: '4px' }}>
+                    <h4 style={{ fontWeight: "600", marginBottom: "4px" }}>
                       {notification.title}
                     </h4>
-                    <p style={{ marginBottom: '8px' }}>{notification.message}</p>
+                    <p style={{ marginBottom: "8px" }}>
+                      {notification.message}
+                    </p>
                     <small style={{ opacity: 0.8 }}>
                       {new Date(notification.date).toLocaleString()}
                     </small>

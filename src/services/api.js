@@ -1,103 +1,119 @@
-import axios from 'axios';
+import axios from "axios";
 
-// Backend URL - update this to your backend URL
-const API_BASE_URL = 'http://localhost:5000/api';
+// ✅ Backend URL — update this if your backend runs on a different server
+const API_BASE_URL = "http://localhost:5000/api";
 
+// ✅ Axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
-// Add token to requests
+// ✅ Add JWT token to all requests
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
-      config.headers.Authorization = Bearer ${token};
+      config.headers.Authorization = `Bearer ${token}`; // ✅ fixed missing backticks
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Handle responses
+// ✅ Handle unauthorized responses globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/';
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/";
     }
     return Promise.reject(error);
   }
 );
 
-// Auth API
+//
+// ─── AUTH API ──────────────────────────────────────────────
+//
 export const authAPI = {
-  register: (data) => api.post('/auth/register', data),
-  login: (data) => api.post('/auth/login', data),
-  getProfile: () => api.get('/auth/profile'),
-  updateProfile: (data) => api.put('/auth/profile', data),
+  register: (data) => api.post("/auth/register", data),
+  login: (data) => api.post("/auth/login", data),
+  getProfile: () => api.get("/auth/profile"),
+  updateProfile: (data) => api.put("/auth/profile", data),
 };
 
-// Departments API
+//
+// ─── DEPARTMENTS API ───────────────────────────────────────
+//
 export const departmentsAPI = {
-  getAll: () => api.get('/departments'),
-  getById: (id) => api.get(/departments/${id}),
-  create: (data) => api.post('/departments', data),
-  update: (id, data) => api.put(/departments/${id}, data),
-  delete: (id) => api.delete(/departments/${id}),
+  getAll: () => api.get("/departments"),
+  getById: (id) => api.get(`/departments/${id}`),
+  create: (data) => api.post("/departments", data),
+  update: (id, data) => api.put(`/departments/${id}`, data),
+  delete: (id) => api.delete(`/departments/${id}`),
 };
 
-// Services API
+//
+// ─── SERVICES API ──────────────────────────────────────────
+//
 export const servicesAPI = {
-  getAll: () => api.get('/services'),
-  getById: (id) => api.get(/services/${id}),
-  getByDepartment: (departmentId) => api.get(/services?department=${departmentId}),
-  create: (data) => api.post('/services', data),
-  update: (id, data) => api.put(/services/${id}, data),
-  delete: (id) => api.delete(/services/${id}),
+  getAll: () => api.get("/services"),
+  getById: (id) => api.get(`/services/${id}`),
+  getByDepartment: (departmentId) =>
+    api.get(`/services?department=${departmentId}`),
+  create: (data) => api.post("/services", data),
+  update: (id, data) => api.put(`/services/${id}`, data),
+  delete: (id) => api.delete(`/services/${id}`),
 };
 
-// Requests API
+//
+// ─── REQUESTS API ──────────────────────────────────────────
+//
 export const requestsAPI = {
-  getAll: (filters) => api.get('/requests', { params: filters }),
-  getById: (id) => api.get(/requests/${id}),
-  create: (data) => api.post('/requests', data),
-  updateStatus: (id, data) => api.patch(/requests/${id}/status, data),
-  delete: (id) => api.delete(/requests/${id}),
+  getAll: (filters) => api.get("/requests", { params: filters }),
+  getById: (id) => api.get(`/requests/${id}`),
+  create: (data) => api.post("/requests", data),
+  updateStatus: (id, data) => api.patch(`/requests/${id}/status`, data),
+  delete: (id) => api.delete(`/requests/${id}`),
 };
 
-// Payments API
+//
+// ─── PAYMENTS API ──────────────────────────────────────────
+//
 export const paymentsAPI = {
-  simulate: (data) => api.post('/payments/simulate', data),
-  getAll: () => api.get('/payments'),
+  simulate: (data) => api.post("/payments/simulate", data),
+  getAll: () => api.get("/payments"),
 };
 
-// Reports API
+//
+// ─── REPORTS API ───────────────────────────────────────────
+//
 export const reportsAPI = {
-  getDashboard: () => api.get('/reports/dashboard'),
-  getStats: () => api.get('/reports/stats'),
+  getDashboard: () => api.get("/reports/dashboard"),
+  getStats: () => api.get("/reports/stats"),
 };
 
-// Notifications API (Mock - implement if backend supports)
+//
+// ─── NOTIFICATIONS API (Optional / Mock) ───────────────────
+//
 export const notificationsAPI = {
-  getAll: () => api.get('/notifications'),
-  markAsRead: (id) => api.patch(/notifications/${id}/read),
+  getAll: () => api.get("/notifications"),
+  markAsRead: (id) => api.patch(`/notifications/${id}/read`),
 };
 
-// Users API (Admin)
+//
+// ─── USERS API (Admin only) ─────────────────────────────────
+//
 export const usersAPI = {
-  getAll: () => api.get('/users'),
-  getById: (id) => api.get(/users/${id}),
-  create: (data) => api.post('/users', data),
-  update: (id, data) => api.put(/users/${id}, data),
-  delete: (id) => api.delete(/users/${id}),
+  getAll: () => api.get("/users"),
+  getById: (id) => api.get(`/users/${id}`),
+  create: (data) => api.post("/users", data),
+  update: (id, data) => api.put(`/users/${id}`, data),
+  delete: (id) => api.delete(`/users/${id}`),
 };
 
 export default api;

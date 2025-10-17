@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import Layout from '../../components/Layout';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Layout from "../../components/Layout";
 import {
   LayoutDashboard,
   FileText,
@@ -9,29 +9,29 @@ import {
   Bell,
   User,
   Upload,
-  X
-} from 'lucide-react';
-import { servicesAPI, departmentsAPI, requestsAPI } from '../../services/api';
-import toast from 'react-hot-toast';
+  X,
+} from "lucide-react";
+import { servicesAPI, departmentsAPI, requestsAPI } from "../../services/api";
+import toast from "react-hot-toast";
 
 const ServiceApplication = () => {
   const [departments, setDepartments] = useState([]);
   const [services, setServices] = useState([]);
   const [formData, setFormData] = useState({
-    department_id: '',
-    service_id: '',
-    description: '',
+    department_id: "",
+    service_id: "",
+    description: "",
   });
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const menuItems = [
-    { path: '/citizen/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/citizen/apply', label: 'Apply for Service', icon: FileText },
-    { path: '/citizen/requests', label: 'Track Requests', icon: Clock },
-    { path: '/citizen/notifications', label: 'Notifications', icon: Bell },
-    { path: '/citizen/profile', label: 'Profile', icon: User },
+    { path: "/citizen/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/citizen/apply", label: "Apply for Service", icon: FileText },
+    { path: "/citizen/requests", label: "Track Requests", icon: Clock },
+    { path: "/citizen/notifications", label: "Notifications", icon: Bell },
+    { path: "/citizen/profile", label: "Profile", icon: User },
   ];
 
   useEffect(() => {
@@ -47,13 +47,13 @@ const ServiceApplication = () => {
   const fetchDepartments = async () => {
     try {
       const response = await departmentsAPI.getAll();
-      setDepartments(response.data.departments  []);
+      setDepartments(response.data.departments || []);
     } catch (error) {
-      console.error('Error fetching departments:', error);
+      console.error("Error fetching departments:", error);
       // Mock data
       setDepartments([
-        { id: 1, name: 'Department of Interior' },
-        { id: 2, name: 'Department of Commerce' },
+        { id: 1, name: "Department of Interior" },
+        { id: 2, name: "Department of Commerce" },
       ]);
     }
   };
@@ -61,13 +61,13 @@ const ServiceApplication = () => {
   const fetchServices = async (departmentId) => {
     try {
       const response = await servicesAPI.getByDepartment(departmentId);
-      setServices(response.data.services  []);
+      setServices(response.data.services || []);
     } catch (error) {
-      console.error('Error fetching services:', error);
+      console.error("Error fetching services:", error);
       // Mock data
       setServices([
-        { id: 1, name: 'Business License', fee: 100 },
-        { id: 2, name: 'ID Card Renewal', fee: 50 },
+        { id: 1, name: "Business License", fee: 100 },
+        { id: 2, name: "ID Card Renewal", fee: 50 },
       ]);
     }
   };
@@ -91,19 +91,19 @@ const ServiceApplication = () => {
 
     try {
       const requestData = new FormData();
-      requestData.append('service_id', formData.service_id);
-      requestData.append('description', formData.description);
+      requestData.append("service_id", formData.service_id);
+      requestData.append("description", formData.description);
 
       files.forEach((file) => {
-        requestData.append('documents', file);
+        requestData.append("documents", file);
       });
 
       await requestsAPI.create(requestData);
-      toast.success('Application submitted successfully!');
-      navigate('/citizen/requests');
+      toast.success("Application submitted successfully!");
+      navigate("/citizen/requests");
     } catch (error) {
-      console.error('Error submitting application:', error);
-      toast.error('Failed to submit application');
+      console.error("Error submitting application:", error);
+      toast.error("Failed to submit application");
     } finally {
       setLoading(false);
     }
@@ -116,9 +116,12 @@ const ServiceApplication = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '32px' }}>
+        <h2
+          style={{ fontSize: "28px", fontWeight: "600", marginBottom: "32px" }}
+        >
           Apply for Service
-        </h2><div className="card">
+        </h2>
+        <div className="card">
           <form onSubmit={handleSubmit}>
             <div className="card-body">
               <div className="form-group">
@@ -179,10 +182,14 @@ const ServiceApplication = () => {
                     type="file"
                     multiple
                     onChange={handleFileChange}
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     id="file-input"
                   />
-                  <label htmlFor="file-input" className="btn btn-outline btn-sm" style={{ marginTop: '16px' }}>
+                  <label
+                    htmlFor="file-input"
+                    className="btn btn-outline btn-sm"
+                    style={{ marginTop: "16px" }}
+                  >
                     Choose Files
                   </label>
                 </div>
@@ -209,9 +216,19 @@ const ServiceApplication = () => {
               </div>
             </div>
 
-            <div className="card-body" style={{ borderTop: '1px solid var(--border)', paddingTop: '24px' }}>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading ? 'Submitting...' : 'Submit Application'}
+            <div
+              className="card-body"
+              style={{
+                borderTop: "1px solid var(--border)",
+                paddingTop: "24px",
+              }}
+            >
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Submit Application"}
               </button>
             </div>
           </form>

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import Layout from '../../components/Layout';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Layout from "../../components/Layout";
 import {
   LayoutDashboard,
   Building2,
@@ -11,25 +11,25 @@ import {
   Plus,
   Edit,
   Trash2,
-  X
-} from 'lucide-react';
-import { departmentsAPI } from '../../services/api';
-import toast from 'react-hot-toast';
+  X,
+} from "lucide-react";
+import { departmentsAPI } from "../../services/api";
+import toast from "react-hot-toast";
 
 const ManageDepartments = () => {
   const [departments, setDepartments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingDept, setEditingDept] = useState(null);
-  const [formData, setFormData] = useState({ name: '', description: '' });
+  const [formData, setFormData] = useState({ name: "", description: "" });
   const [loading, setLoading] = useState(false);
 
   const menuItems = [
-    { path: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/admin/departments', label: 'Departments', icon: Building2 },
-    { path: '/admin/services', label: 'Services', icon: Briefcase },
-    { path: '/admin/users', label: 'Users', icon: Users },
-    { path: '/admin/reports', label: 'Reports', icon: BarChart3 },
-    { path: '/admin/notifications', label: 'Notifications', icon: Bell },
+    { path: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/admin/departments", label: "Departments", icon: Building2 },
+    { path: "/admin/services", label: "Services", icon: Briefcase },
+    { path: "/admin/users", label: "Users", icon: Users },
+    { path: "/admin/reports", label: "Reports", icon: BarChart3 },
+    { path: "/admin/notifications", label: "Notifications", icon: Bell },
   ];
 
   useEffect(() => {
@@ -39,12 +39,20 @@ const ManageDepartments = () => {
   const fetchDepartments = async () => {
     try {
       const response = await departmentsAPI.getAll();
-      setDepartments(response.data.departments  []);
+      setDepartments(response.data.departments || []);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       setDepartments([
-        { id: 1, name: 'Department of Interior', description: 'Internal affairs and administration' },
-        { id: 2, name: 'Department of Commerce', description: 'Business and trade services' },
+        {
+          id: 1,
+          name: "Department of Interior",
+          description: "Internal affairs and administration",
+        },
+        {
+          id: 2,
+          name: "Department of Commerce",
+          description: "Business and trade services",
+        },
       ]);
     }
   };
@@ -56,42 +64,42 @@ const ManageDepartments = () => {
     try {
       if (editingDept) {
         await departmentsAPI.update(editingDept.id, formData);
-        toast.success('Department updated successfully');
+        toast.success("Department updated successfully");
       } else {
         await departmentsAPI.create(formData);
-        toast.success('Department created successfully');
+        toast.success("Department created successfully");
       }
       fetchDepartments();
       closeModal();
     } catch (error) {
-      toast.error('Operation failed');
+      toast.error("Operation failed");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this department?')) return;
+    if (!confirm("Are you sure you want to delete this department?")) return;
 
     try {
       await departmentsAPI.delete(id);
-      toast.success('Department deleted');
+      toast.success("Department deleted");
       fetchDepartments();
     } catch (error) {
-      toast.error('Failed to delete department');
+      toast.error("Failed to delete department");
     }
   };
 
   const openModal = (dept = null) => {
     setEditingDept(dept);
-    setFormData(dept  { name: '', description: '' });
+    setFormData(dept || { name: "", description: "" });
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
     setEditingDept(null);
-    setFormData({ name: '', description: '' });
+    setFormData({ name: "", description: "" });
   };
 
   return (
@@ -101,15 +109,23 @@ const ManageDepartments = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '600' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "32px",
+          }}
+        >
+          <h2 style={{ fontSize: "28px", fontWeight: "600" }}>
             Manage Departments
           </h2>
           <button className="btn btn-primary" onClick={() => openModal()}>
             <Plus size={20} />
             Add Department
           </button>
-        </div><div className="card">
+        </div>
+        <div className="card">
           <div className="table-container">
             <table className="table">
               <thead>
@@ -123,11 +139,13 @@ const ManageDepartments = () => {
               <tbody>
                 {departments.map((dept) => (
                   <tr key={dept.id}>
-                    <td><strong>#{dept.id}</strong></td>
+                    <td>
+                      <strong>#{dept.id}</strong>
+                    </td>
                     <td>{dept.name}</td>
                     <td>{dept.description}</td>
                     <td>
-                      <div style={{ display: 'flex', gap: '8px' }}>
+                      <div style={{ display: "flex", gap: "8px" }}>
                         <button
                           className="btn btn-outline btn-sm"
                           onClick={() => openModal(dept)}
@@ -156,7 +174,7 @@ const ManageDepartments = () => {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">
-                {editingDept ? 'Edit Department' : 'Add Department'}
+                {editingDept ? "Edit Department" : "Add Department"}
               </h3>
               <button className="modal-close" onClick={closeModal}>
                 <X size={24} />
@@ -170,7 +188,9 @@ const ManageDepartments = () => {
                     type="text"
                     className="form-input"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -179,17 +199,27 @@ const ManageDepartments = () => {
                   <textarea
                     className="form-textarea"
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     required
                   />
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-outline" onClick={closeModal}>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={closeModal}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? 'Saving...' : 'Save'}
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
+                  {loading ? "Saving..." : "Save"}
                 </button>
               </div>
             </form>
