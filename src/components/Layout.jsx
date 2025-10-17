@@ -1,14 +1,8 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import {
-  LogOut,
-  Bell,
-  User,
-  Menu,
-  X
-} from 'lucide-react';
-import { useState } from 'react';
-import './Layout.css';
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { LogOut, Bell, User, Menu, X } from "lucide-react";
+import { useState } from "react";
+import "./Layout.css";
 
 const Layout = ({ children, menuItems, title }) => {
   const { user, logout } = useAuth();
@@ -18,13 +12,13 @@ const Layout = ({ children, menuItems, title }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <div className="layout">
       {/* Sidebar */}
-      <aside className={sidebar ${sidebarOpen ? 'open' : ''}}>
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <h2>{title}</h2>
           <button
@@ -39,7 +33,9 @@ const Layout = ({ children, menuItems, title }) => {
             <Link
               key={index}
               to={item.path}
-              className={nav-item ${location.pathname === item.path ? 'active' : ''}}
+              className={`nav-item ${
+                location.pathname === item.path ? "active" : ""
+              }`}
               onClick={() => setSidebarOpen(false)}
             >
               <item.icon size={20} />
@@ -77,9 +73,7 @@ const Layout = ({ children, menuItems, title }) => {
         </header>
 
         {/* Page Content */}
-        <main className="page-content">
-          {children}
-        </main>
+        <main className="page-content">{children}</main>
       </div>
 
       {/* Overlay for mobile */}
