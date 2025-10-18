@@ -15,10 +15,13 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    const result = await login(email, password, "admin");
-    setLoading(false);
+    const result = await login(email, password);
 
     if (result.success) {
+      if (result.user.role !== "admin") {
+        toast.error("Access denied: not an admin");
+        return;
+      }
       navigate("/admin/dashboard");
     }
   };
